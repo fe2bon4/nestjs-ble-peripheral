@@ -31,37 +31,6 @@ export class PeripheralService {
 
       this.bleno.startAdvertising(this.name, ['6d79686561727473656e74696e656c10'], ( error ) => {
         if(error) throw error 
-
-
-    this.bleno.setServices([
-      new this.bleno.PrimaryService({
-        uuid: '6d79686561727473656e74696e656c10', // or 'fff0' for 16-bit
-        characteristics: [
-          new this.bleno.Characteristic({
-            value: null,
-            //@ts-ignore
-            name: "SetupCharacteristic",
-            descriptors: [
-              new Descriptor({
-                uuid: '2901',
-                value: 'SetupCharacteristic' // static value, must be of type Buffer or string if set
-            })
-            ],
-            uuid: 'ffffffffffffff1' ,
-            properties: ['read', 'write'],
-              onReadRequest: this.onReadRequest.bind(this), // optional read request handler, function(offset, callback) { ... }
-              onWriteRequest: this.onWriteRequest.bind(this), // optional write request handler, function(data, offset, withoutResponse, callback) { ...}
-              onSubscribe: null, // optional notify/indicate subscribe handler, function(maxValueSize, updateValueCallback) { ...}
-              onUnsubscribe: null, // optional notify/indicate unsubscribe handler, function() { ...}
-              onNotify: null, // optional notify sent handler, function() { ...}
-              onIndicate: null // optional indicate confirmation received handler, function() { ...}
-          })
-        ]
-      })  
-
-
-    ])
-
       })
     } else {
       this.bleno.stopAdvertising()
@@ -106,7 +75,38 @@ export class PeripheralService {
   }
 
   private onAdvertisingStart(error){
+    if(error) throw error
+    
     Logger.log(`Starting to advertise`, this.serviceName)
+    this.bleno.setServices([
+      new this.bleno.PrimaryService({
+        uuid: '6d79686561727473656e74696e656c10', // or 'fff0' for 16-bit
+        characteristics: [
+          new this.bleno.Characteristic({
+            value: null,
+            //@ts-ignore
+            name: "SetupCharacteristic",
+            descriptors: [
+              new Descriptor({
+                uuid: '2901',
+                value: 'SetupCharacteristic' // static value, must be of type Buffer or string if set
+            })
+            ],
+            uuid: 'ffffffffffffff1' ,
+            properties: ['read', 'write'],
+              onReadRequest: this.onReadRequest.bind(this), // optional read request handler, function(offset, callback) { ... }
+              onWriteRequest: this.onWriteRequest.bind(this), // optional write request handler, function(data, offset, withoutResponse, callback) { ...}
+              onSubscribe: null, // optional notify/indicate subscribe handler, function(maxValueSize, updateValueCallback) { ...}
+              onUnsubscribe: null, // optional notify/indicate unsubscribe handler, function() { ...}
+              onNotify: null, // optional notify sent handler, function() { ...}
+              onIndicate: null // optional indicate confirmation received handler, function() { ...}
+          })
+        ]
+      })  
+
+
+    ])
+
   
   }
 
